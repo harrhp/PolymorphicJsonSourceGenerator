@@ -1,0 +1,49 @@
+name: enforce-settings
+
+on:
+  # manual
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      # when workflow itself changes
+      - .github/workflows/enforce-settings.yml
+      # when settings change
+      - .github/settings/**
+  schedule:
+    # every day at 6:18 UTC
+    - cron: "18 6 * * *"
+  # when another workflow completed
+  workflow_run:
+    workflows: ["Sync files from templates"]
+    branches: [main]
+    types: [completed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout this repo
+      - uses: actions/checkout@v2
+      - name: set repo settings
+        # call github api
+        run: >
+          wget
+          -O-
+          --method PATCH
+          --header "Accept: application/vnd.github.v3+json"
+          --header "Authorization: Bearer ${{ secrets.ENFORCE_SETTINGS_GITHUB_TOKEN }}"
+          --body-file .github/settings/repo-settings.json
+          https://api.github.com/repos/$GITHUB_REPOSITORY
+      - name: set branch protection settings
+        # for each file create branch protection settings for branch with name of the file
+        run: >
+          find .github/settings/branch-protection -name *.json 
+          | xargs -I {} bash -c 'wget
+          -O-
+          --method PUT
+          --header "Accept: application/vnd.github.v3+json"
+          --header "Authorization: Bearer ${{ secrets.ENFORCE_SETTINGS_GITHUB_TOKEN }}"
+          --body-file {}
+          https://api.github.com/repos/$GITHUB_REPOSITORY/branches/$(basename -s .json {})/protection'
