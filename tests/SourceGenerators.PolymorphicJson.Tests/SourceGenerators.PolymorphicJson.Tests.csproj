@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(TestSdkVersion)" />
+        <PackageReference Include="MSTest.TestAdapter" Version="$(MsTestVersion)" />
+        <PackageReference Include="MSTest.TestFramework" Version="$(MsTestVersion)" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\SourceGenerators.PolymorphicJson\SourceGenerators.PolymorphicJson.csproj" OutputItemType="Analyzer" />
+    </ItemGroup>
+
+</Project>
