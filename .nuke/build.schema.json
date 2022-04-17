@@ -79,11 +79,12 @@
             "enum": [
               "Build",
               "Changelog",
+              "ConfigureGit",
               "CreateGithubRelease",
               "Pack",
               "Publish",
-              "Release",
               "Restore",
+              "TagReleaseAndPush",
               "Test"
             ]
           }
@@ -100,11 +101,12 @@
             "enum": [
               "Build",
               "Changelog",
+              "ConfigureGit",
               "CreateGithubRelease",
               "Pack",
               "Publish",
-              "Release",
               "Restore",
+              "TagReleaseAndPush",
               "Test"
             ]
           }
