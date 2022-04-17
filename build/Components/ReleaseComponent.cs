@@ -16,7 +16,6 @@ public interface ReleaseComponent : ChangelogComponent
 
     Target TagReleaseAndPush =>
         _ => _.Requires(() => IsLocalBuild)
-            .DependsOn(Changelog)
             .Executes(() =>
             {
                 Git($"tag {Version}");
