@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>Harrhp.SourceGenerators.PolymorphicJson</PackageId>
-        <Version>1.0.0-beta.1</Version>
+        <Version>1.0.0-beta.2</Version>
         <Title>Polymorphic JSON source generator</Title>
         <PackageTags>SourceGenerator JSON</PackageTags>
         <Description>Generates System.Text.Json.Serialization.JsonConverter that handles serialization and deserialization of abstract records</Description>

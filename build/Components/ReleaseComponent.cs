@@ -1,7 +1,6 @@
 ﻿using NuGet.Versioning;
 using Nuke.Common;
 using Nuke.Common.CI.GitHubActions;
-using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.GitHub;
 using Nuke.Common.Utilities;
 using Octokit;
@@ -10,41 +9,24 @@ using static Nuke.Common.Tools.Git.GitTasks;
 
 namespace _build.Components;
 
-public interface ReleaseComponent : PublishComponent, ChangelogComponent, RepositoryComponent
+public interface ReleaseComponent : ChangelogComponent
 {
-    string Version =>
-        Solution.AllProjects.First(x => !string.IsNullOrEmpty(x.GetProperty("PackageId")))
-            .GetProperty("Version")
-            .NotNull();
-
     [Parameter, Secret]
     string? GithubToken => TryGetValue(() => GithubToken) ?? GitHubActions.Instance?.Token;
 
-    Target Changelog =>
-        _ => _.Unlisted()
-            .After(Publish)
-            .Requires(() => GitHasCleanWorkingCopy())
-            .Requires(() => File.Exists(ChangelogFile))
+    Target TagReleaseAndPush =>
+        _ => _.Requires(() => IsLocalBuild)
+            .DependsOn(Changelog)
             .Executes(() =>
             {
-                FinalizeChangelog(ChangelogFile, Version, Repository);
-                Git($"add {ChangelogFile}");
-                Git($"commit -m \"Finalize {Path.GetFileName(ChangelogFile)} for {Version}\"");
-            });
-
-    Target Release =>
-        _ => _.DependsOn(Changelog)
-            .Executes(() =>
-            {
-                var branch = GitCurrentBranch();
                 Git($"tag {Version}");
-                Git($"push --atomic origin {branch} {Version}");
+                Git($"push --atomic origin {Repository.Branch} {Version}");
             });
 
     Target CreateGithubRelease =>
         _ => _.Requires(() => GithubToken)
+            .After(Publish)
             .OnlyWhenStatic(() => Repository.IsGitHubRepository())
-            .After(Release)
             .Executes(async () =>
             {
                 var githubClient = new GitHubClient(new ProductHeaderValue(nameof(NukeBuild)))

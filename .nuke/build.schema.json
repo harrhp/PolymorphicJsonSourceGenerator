@@ -82,8 +82,8 @@
               "CreateGithubRelease",
               "Pack",
               "Publish",
-              "Release",
               "Restore",
+              "TagReleaseAndPush",
               "Test"
             ]
           }
@@ -103,8 +103,8 @@
               "CreateGithubRelease",
               "Pack",
               "Publish",
-              "Release",
               "Restore",
+              "TagReleaseAndPush",
               "Test"
             ]
           }
