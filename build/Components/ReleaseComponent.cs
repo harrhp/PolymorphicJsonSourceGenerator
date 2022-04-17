@@ -25,6 +25,7 @@ public interface ReleaseComponent : PublishComponent, ChangelogComponent, Reposi
     Target Changelog =>
         _ => _.Unlisted()
             .After(Publish)
+            .Requires(() => GitHasCleanWorkingCopy())
             .Requires(() => File.Exists(ChangelogFile))
             .Executes(() =>
             {
