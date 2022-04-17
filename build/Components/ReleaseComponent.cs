@@ -38,8 +38,9 @@ public interface ReleaseComponent : PublishComponent, ChangelogComponent, Reposi
         _ => _.DependsOn(Changelog)
             .Executes(() =>
             {
+                var branch = GitCurrentBranch();
                 Git($"tag {Tag}");
-                Git($"push origin {Tag}");
+                Git($"push --atomic origin {branch} {Tag}");
             });
 
     Target CreateGithubRelease =>
