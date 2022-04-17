@@ -8,7 +8,7 @@
         <Description>Generates System.Text.Json.Serialization.JsonConverter that handles serialization and deserialization of abstract records</Description>
         <Authors>prfbszbq</Authors>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/harrhp/SourceGenerators</RepositoryUrl>
+        <RepositoryUrl>https://github.com/harrhp/PolymorphicJsonSourceGenerator/</RepositoryUrl>
         <IncludeBuildOutput>false</IncludeBuildOutput>
     </PropertyGroup>
     <ItemGroup>
