@@ -17,8 +17,6 @@ public interface ReleaseComponent : PublishComponent, ChangelogComponent, Reposi
             .GetProperty("Version")
             .NotNull();
 
-    string Tag => $"v{Version}";
-
     [Parameter, Secret]
     string? GithubToken => TryGetValue(() => GithubToken) ?? GitHubActions.Instance?.Token;
 
@@ -39,8 +37,8 @@ public interface ReleaseComponent : PublishComponent, ChangelogComponent, Reposi
             .Executes(() =>
             {
                 var branch = GitCurrentBranch();
-                Git($"tag {Tag}");
-                Git($"push --atomic origin {branch} {Tag}");
+                Git($"tag {Version}");
+                Git($"push --atomic origin {branch} {Version}");
             });
 
     Target CreateGithubRelease =>
@@ -57,9 +55,9 @@ public interface ReleaseComponent : PublishComponent, ChangelogComponent, Reposi
                 await githubClient.Repository.Release.Create(
                     Repository.GetGitHubOwner(),
                     Repository.GetGitHubName(),
-                    new NewRelease(Tag)
+                    new NewRelease(Version)
                     {
-                        Name = Tag,
+                        Name = $"v{Version}",
                         Body = ExtractChangelogSectionNotes(ChangelogFile, Version).JoinNewLine(),
                         Prerelease = NuGetVersion.Parse(Version).IsPrerelease
                     });
