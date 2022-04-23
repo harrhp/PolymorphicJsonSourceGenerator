@@ -16,4 +16,8 @@ jobs:
         runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@v3
-            - run: ./build.cmd Test Pack
+            - uses: actions/setup-dotnet@v2
+              with:
+                  dotnet-version: "6.0.x"
+            - run: dotnet tool restore
+            - run: dotnet npb Test Pack
